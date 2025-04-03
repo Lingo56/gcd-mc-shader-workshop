@@ -15,17 +15,17 @@ varying vec3 viewPos;
 
 // STEP 1: Calculate wave noise
 vec3 calculateCaustics(vec2 worldCoord, vec3 waterBaseColor) {
-    return 0;
+    return waterBaseColor;
 }
 
 // STEP 2: Apply displacement to world coordinates
-vec2 calculateDisplacement(vec2 worldCoord) {
-    return 0;
+vec2 calculateUVWarp(vec2 worldCoord) {
+    return vec2(0,0);
 }
 
 // STEP 3: Fade nearby and at distance
 vec3 applyDistanceFade(vec3 waveColor, vec3 waterBaseColor, vec3 viewPosition) {    
-    return 0;
+    return waveColor;
 }
 
 void main() {
@@ -48,13 +48,13 @@ void main() {
         worldCoord *= noiseScale;
         
         // Apply displacement to coordinates
-        vec2 displacedCoord = calculateDisplacement(worldCoord);
+        vec2 warpedUVCoordinate = calculateUVWarp(worldCoord);
         
         // Calculate caustic pattern using the new parameter
-        vec3 waveColor = calculateCaustics(displacedCoord, waterBaseColor);
+        vec3 waveColor = calculateCaustics(worldCoord, waterBaseColor);
         
         // Apply distance-based fading
-        albedo.rgb = waveColor;
+        albedo.rgb = applyDistanceFade(waveColor, waterBaseColor, viewPos);
     }
 
     // Normalize lightmap coordinates (0-15 range → 0-1 range)
